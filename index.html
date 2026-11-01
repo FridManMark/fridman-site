@@ -606,7 +606,7 @@
                 </div>
                 <p style="line-height: 1.8; color: #c8c0e0; margin-bottom: 20px;">
                     <strong>FridMan</strong> — это Android-приложение для инъекции JavaScript-скриптов в процессы с помощью Frida. 
-                    Работает полностью автономно на устройстве через <span class="highlight">frida-inject</span> без необходимости в frida-server, 
+                    Работает полностью автономно на устройстве через встроенный <span class="highlight">frida-inject</span> без необходимости в frida-server, 
                     ADB или компьютере.
                 </p>
                 <div style="margin-top: 20px;">
@@ -643,7 +643,7 @@
                             </svg>
                         </div>
                         <h3>Инъекция без сервера</h3>
-                        <p>Через frida-inject напрямую в процесс</p>
+                        <p>Через встроенный frida-inject напрямую в процесс</p>
                     </div>
                     <div class="feature-item">
                         <div class="feature-icon">
@@ -731,7 +731,7 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h3>Подготовка</h3>
-                        <p>Скопируйте <span class="highlight">frida-inject</span> в <span class="highlight">/data/local/tmp/</span> и установите права 777</p>
+                        <p>Приложение уже содержит встроенный <span class="highlight">frida-inject</span>, дополнительная настройка файлов не требуется.</p>
                     </div>
                 </div>
                 <div class="step">
@@ -745,7 +745,7 @@
                     <div class="step-number">3</div>
                     <div class="step-content">
                         <h3>Инъекция скрипта</h3>
-                        <p>Копирует скрипт во временную папку, ставит 777, запускает: <span class="highlight">frida-inject -p PID -s script.js</span></p>
+                        <p>Приложение автоматически готовит скрипт и запускает встроенный frida-inject: <span class="highlight">frida-inject -p PID -s script.js</span></p>
                     </div>
                 </div>
                 <div class="step">
@@ -783,7 +783,7 @@
                     <p style="margin: 0;">
                         FridMan работает как foreground-сервис с плавающим overlay-окном. 
                         Внутри окна запущен WebView с полноценным интерфейсом. 
-                        Все root-команды выполняются через su, а скрипты инжектируются через frida-inject.
+                        Все root-команды выполняются через su, а скрипты инжектируются через встроенный frida-inject.
                     </p>
                 </div>
 
@@ -796,13 +796,10 @@
                         2. Нажимает Run → приложение находит PID целевого процесса через системную команду
                     </div>
                     <div class="diagram-item">
-                        3. Скрипт копируется во временную папку с правами 777
+                        3. Приложение автоматически готовит скрипт и запускает встроенный frida-inject
                     </div>
                     <div class="diagram-item">
-                        4. Запускается: <span class="highlight">frida-inject -p PID -s script.js</span>
-                    </div>
-                    <div class="diagram-item">
-                        5. stdout/stderr процесса читается в реальном времени → логи появляются в терминале
+                        4. stdout/stderr процесса читается в реальном времени → логи появляются в терминале
                     </div>
                 </div>
 
@@ -859,7 +856,7 @@
                         <li><strong>Скрипты пользователя</strong> — хранятся внутри приложения, доступны через раздел "My Scripts"</li>
                         <li><strong>Временный скрипт</strong> — копируется в cache при каждой инъекции</li>
                         <li><strong>Настройки</strong> — размер иконки, прозрачность, масштаб, позиции кнопок</li>
-                        <li><strong>frida-inject</strong> — должен лежать в <span class="highlight">/data/local/tmp/</span> с правами 777</li>
+                        <li><strong>frida-inject</strong> — уже встроен в приложение и используется автоматически</li>
                         <li><strong>frida_commands.txt</strong> — файл-мост команд, создаётся автоматически</li>
                     </ul>
                 </div>
@@ -893,7 +890,7 @@
                         </tr>
                         <tr>
                             <td>Запустить скрипт</td>
-                            <td>Копирование + chmod + запуск frida-inject</td>
+                            <td>Автоматическая подготовка и запуск встроенного frida-inject</td>
                         </tr>
                         <tr>
                             <td>Отправить команду</td>
@@ -947,24 +944,16 @@
                             <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
                             <polyline points="22 4 12 14.01 9 11.01"/>
                         </svg>
-                        Всего 2 шага!
+                        Всё уже включено!
                     </div>
-                    <p style="margin: 0;">Никаких сложных установок — просто скопируйте frida-inject и дайте права</p>
+                    <p style="margin: 0;">Приложение содержит встроенный frida-inject. Никаких сложных установок и копирования файлов не нужно.</p>
                 </div>
 
                 <div class="step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3>Скопируйте frida-inject</h3>
-                        <p>Закиньте файл <span class="highlight">frida-inject</span> в папку <span class="highlight">/data/local/tmp/</span></p>
-                        <div class="code-block">
-                            <code>
-<span class="code-comment"># Через файловый менеджер с root или adb:</span><br>
-su<br>
-cp /sdcard/Download/frida-inject /data/local/tmp/<br>
-chmod 777 /data/local/tmp/frida-inject
-                            </code>
-                        </div>
+                        <h3>Разрешите overlay-права</h3>
+                        <p>При первом запуске предоставьте приложению разрешение на отображение поверх других окон (SYSTEM_ALERT_WINDOW).</p>
                     </div>
                 </div>
 
@@ -972,7 +961,7 @@ chmod 777 /data/local/tmp/frida-inject
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3>Запустите FridMan</h3>
-                        <p>Разрешите overlay-права → нажмите <strong>"Launch icon"</strong> → появится плавающая иконка</p>
+                        <p>Нажмите <strong>"Launch icon"</strong> → появится плавающая иконка, полностью готовая к инъекции скриптов.</p>
                     </div>
                 </div>
             </div>
@@ -1219,7 +1208,7 @@ console.log(<span class="code-string">"[+] Script ready. Type help()"</span>);
                     </div>
                     <ul style="margin: 10px 0 0 20px;">
                         <li>Root права на устройстве</li>
-                        <li>Файл <code>frida-inject</code> (скачать отдельно)</li>
+                        <li>Встроенный frida-inject (уже включен в APK, ничего скачивать не нужно)</li>
                         <li>Разрешение на overlay (SYSTEM_ALERT_WINDOW)</li>
                         <li>Android 8.0+ (API 26)</li>
                     </ul>
@@ -1229,24 +1218,15 @@ console.log(<span class="code-string">"[+] Script ready. Type help()"</span>);
             <div class="card">
                 <div class="card-title">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
                     </svg>
-                    Скачать frida-inject
+                    Никаких дополнительных загрузок
                 </div>
                 <p style="margin-bottom: 12px; color: #c8c0e0;">
-                    FridMan требует frida-inject для работы. Скачайте последнюю версию:
+                    <strong>frida-inject уже встроен в приложение!</strong> Вам не нужно скачивать его отдельно, распаковывать или выдавать права через терминал. 
+                    Просто установите <strong>FridMan.apk</strong> и пользуйтесь.
                 </p>
-                
-                <div class="code-block">
-                    <code>
-<span class="code-comment"># Официальный сайт Frida:</span><br>
-<a href="https://github.com/frida/frida/releases" target="_blank" style="color: #f5c98b;">https://github.com/frida/frida/releases</a><br>
-<br>
-<span class="code-comment"># Найдите файл frida-inject-*.xz для Android</span><br>
-<span class="code-comment"># Распакуйте и скопируйте в /data/local/tmp/</span><br>
-<span class="code-comment"># chmod 777 /data/local/tmp/frida-inject</span>
-                    </code>
-                </div>
             </div>
         </div>
     </div>
